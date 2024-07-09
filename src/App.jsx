@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./components/Home";
+import Home from "./Components/Home";
 import HomeWrapper from "./Wrappers/HomeWrapper";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Register from "./Components/Register";
+import Login from "./Components/Login";
 import DashboardWrapper from "./Wrappers/DashboardWrapper";
 import ProtectedRoute from "./contexts/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
