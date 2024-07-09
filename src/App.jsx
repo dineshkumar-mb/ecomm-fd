@@ -1,8 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./Components/Home";
+import Home from "./components/Home";
 import HomeWrapper from "./Wrappers/HomeWrapper";
-import Register from "./Components/Register";
-import Login from "./Components/Login";
+import Register from "./components/Register";
+import Login from "./components/Login";
+import DashboardWrapper from "./Wrappers/DashboardWrapper";
+import ProtectedRoute from "./contexts/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +25,23 @@ const router = createBrowserRouter([
         element: <Login />
       }
     ]
+  },
+  {
+    path: "dashboard",
+    element: (
+      <ProtectedRoute>
+        <DashboardWrapper />
+      </ProtectedRoute>
+    )
   }
 ])
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }
 
 export default App;
