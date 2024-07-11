@@ -1,47 +1,68 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./Components/Home";
+import Home from "./components/Home";
 import HomeWrapper from "./Wrappers/HomeWrapper";
-import Register from "./Components/Register";
-import Login from "./Components/Login";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import DashboardWrapper from "./Wrappers/DashboardWrapper";
-import ProtectedRoute from "./contexts/ProtectedRoute";
-import { AuthProvider } from "./contexts/AuthContext";
+import userLoaders from "./loaders/userLoaders";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+import LoginRoute from "./Routes/LoginRoute";
+import AdminDashboardWrapper from "./Wrappers/AdminDashboardWrapper";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeWrapper />,
+    element: <LoginRoute />,
+    loader: userLoaders.checkAuth,
     children: [
       {
-        path: "/",
-        element: <Home />
-      },
-      {
-        path: "register",
-        element: <Register />
-      },
-      {
-        path: "login",
-        element: <Login />
+        path: "",
+        element: <HomeWrapper />,
+        children: [
+          {
+            path: "/",
+            element: <Home />
+          },
+          {
+            path: "register",
+            element: <Register />
+          },
+          {
+            path: "login",
+            element: <Login />
+          }
+        ]
       }
     ]
   },
   {
     path: "dashboard",
-    element: (
-      <ProtectedRoute>
-        <DashboardWrapper />
-      </ProtectedRoute>
-    )
+    element: <ProtectedRoute />,
+    loader: userLoaders.checkAuth,
+    children: [
+      {
+        path: "",
+        element: <DashboardWrapper />,
+        loader: userLoaders.getUser,
+      }
+    ]
+  },
+  {
+    path: "admin",
+    element: <ProtectedRoute />,
+    loader: userLoaders.checkAuth,
+    children: [
+      {
+        path: "",
+        element: <AdminDashboardWrapper />,
+        loader: userLoaders.getUser,
+      }
+    ]
   }
 ])
 
 const App = () => {
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App;
